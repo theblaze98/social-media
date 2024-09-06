@@ -1,0 +1,11 @@
+export interface IUser {
+  id: string
+  name: string
+  username: string
+  email: string
+  password: string
+  avatarUrl: string
+  bio: string
+  createdAt: Date
+  lastConnection: Date
+}
