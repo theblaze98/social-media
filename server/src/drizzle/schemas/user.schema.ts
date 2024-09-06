@@ -1,9 +1,9 @@
-import { pgTable, varchar, timestamp, text } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, timestamp, text, boolean } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { PostTable } from './post.schema'
 import { CommentTable } from './comment.schema'
 
-export const UserTable = pgTable('User', {
+export const UserTable = pgTable('user', {
   id: varchar('id', { length: 255 }).primaryKey().unique().notNull(),
   name: varchar('name', { length: 255 }).notNull(),
   avatarUrl: text('avatarUrl'),
@@ -13,6 +13,7 @@ export const UserTable = pgTable('User', {
   password: varchar('password', { length: 255 }).notNull(),
   createdAt: timestamp('createdAt').defaultNow().notNull(),
   lastConnection: timestamp('lastConnection').defaultNow().notNull(),
+  verify: boolean('verify').default(false),
   otpCode: varchar('otpCode', { length: 6 }),
   otpExpiresAt: timestamp('otpExpiresAt'),
 })
