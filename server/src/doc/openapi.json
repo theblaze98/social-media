@@ -1,0 +1,93 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "User API",
+    "version": "1.0.0",
+    "description": "API for updating user information"
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update user information",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the user.",
+            "minLength": 3
+          },
+          "username": {
+            "type": "string",
+            "description": "The username of the user.",
+            "minLength": 3
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user.",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user.",
+            "minLength": 4
+          },
+          "otpCode": {
+            "type": "string",
+            "description": "The one-time password code.",
+            "minLength": 6,
+            "maxLength": 6
+          },
+          "lastConnection": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The last connection of the user."
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "The verification status of the user."
+          },
+          "otpExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The expiration date of the one-time password code."
+          }
+        }
+      }
+    }
+  }
+}
