@@ -4,8 +4,9 @@ export interface IUser {
   username: string
   email: string
   password: string
-  avatarUrl: string
-  bio: string
   createdAt: Date
   lastConnection: Date
+  verify: boolean
+  otpCode: string
+  otpExpiresAt: Date
 }
