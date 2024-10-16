@@ -19,6 +19,6 @@ import { EmailService } from './email.service'
     },
     EmailService,
   ],
-  exports: [EmailService],
+  exports: [EMAIL_PROVIDER, EmailService],
 })
 export class EmailModule {}
