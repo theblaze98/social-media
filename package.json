@@ -6,7 +6,10 @@
 	"scripts": {
 		"lint": "pnpm --filter \"**\" lint",
 		"dev": "pnpm --filter \"**\" dev",
-		"format": "pnpm --filter \"**\" format"
+		"format": "pnpm --filter \"**\" format",
+		"generate:migrate": "pnpm --filter \"server\" generate:migrate",
+		"push": "pnpm --filter \"server\" push"
+
 	},
 	"keywords": [],
 	"author": "",
