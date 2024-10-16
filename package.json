@@ -1,0 +1,14 @@
+{
+	"name": "social-network",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"lint": "pnpm --filter \"**\" lint",
+		"dev": "pnpm --filter \"**\" dev",
+		"format": "pnpm --filter \"**\" format"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}
