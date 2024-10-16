@@ -85,5 +85,5 @@ export interface CreateUserDto {
   email: string
   password: string
   otpCode?: string
-  otpExppiresAt?: Date
+  otpExpiresAt?: Date
 }

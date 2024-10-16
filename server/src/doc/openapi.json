@@ -1,93 +1,178 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "User API",
-    "version": "1.0.0",
-    "description": "API for updating user information"
-  },
-  "paths": {
-    "/users": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "put": {
-        "summary": "Update user information",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User updated successfully"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
-    "schemas": {
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The name of the user.",
-            "minLength": 3
-          },
-          "username": {
-            "type": "string",
-            "description": "The username of the user.",
-            "minLength": 3
-          },
-          "email": {
-            "type": "string",
-            "description": "The email of the user.",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "The password of the user.",
-            "minLength": 4
-          },
-          "otpCode": {
-            "type": "string",
-            "description": "The one-time password code.",
-            "minLength": 6,
-            "maxLength": 6
-          },
-          "lastConnection": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The last connection of the user."
-          },
-          "verify": {
-            "type": "boolean",
-            "description": "The verification status of the user."
-          },
-          "otpExpiresAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The expiration date of the one-time password code."
-          }
-        }
-      }
-    }
-  }
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Social Media API",
+		"version": "1.0.0",
+		"description": "API for managing users and their posts"
+	},
+	"paths": {
+		"/auth/register": {
+			"post": {
+				"tags": [
+					"auth"
+				],
+				"summary": "Register a new user",
+				"operationId": "register",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "User successfully registered"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"409": {
+						"description": "Email or username already exists"
+					}
+				}
+			}
+		},
+		"/users": {
+			"get": {
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				]
+			},
+			"put": {
+				"summary": "Update user information",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User updated successfully"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		},
+		"schemas": {
+			"CreateUserDto": {
+				"type": "object",
+				"properties": {
+					"username": {
+						"type": "string",
+						"example": "johndoe",
+						"description": "The username of the user"
+					},
+					"email": {
+						"type": "string",
+						"example": "john@example.com",
+						"description": "The email of the user"
+					},
+					"password": {
+						"type": "string",
+						"example": "password123",
+						"description": "The password for the user account"
+					}
+				},
+				"required": [
+					"username",
+					"email",
+					"password"
+				]
+			},
+			"UpdateUserDto": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "The name of the user.",
+						"minLength": 3
+					},
+					"username": {
+						"type": "string",
+						"description": "The username of the user.",
+						"minLength": 3
+					},
+					"email": {
+						"type": "string",
+						"description": "The email of the user.",
+						"format": "email"
+					},
+					"password": {
+						"type": "string",
+						"description": "The password of the user.",
+						"minLength": 4
+					},
+					"otpCode": {
+						"type": "string",
+						"description": "The one-time password code.",
+						"minLength": 6,
+						"maxLength": 6
+					},
+					"lastConnection": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The last connection of the user."
+					},
+					"verify": {
+						"type": "boolean",
+						"description": "The verification status of the user."
+					},
+					"otpExpiresAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The expiration date of the one-time password code."
+					}
+				}
+			}
+		}
+	},
+	"Transform": "AWS::Serverless-2016-10-31",
+	"Resources": {
+		"Api": {
+			"Type": "AWS::Serverless::Api",
+			"Properties": {
+				"Name": {
+					"Fn::Sub": [
+						"${ResourceName} From Stack ${AWS::StackName}",
+						{
+							"ResourceName": "Api"
+						}
+					]
+				},
+				"StageName": "Prod",
+				"DefinitionBody": {
+					"openapi": "3.0",
+					"info": {},
+					"paths": {
+						"/": {
+							"get": {
+								"responses": {}
+							}
+						}
+					}
+				},
+				"EndpointConfiguration": "REGIONAL",
+				"TracingEnabled": true
+			}
+		}
+	}
 }

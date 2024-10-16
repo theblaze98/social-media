@@ -46,7 +46,7 @@ export class UserRepository implements IUserRepository {
     return user[0]
   }
 
-  async removeUser(id: string) {
+  async deleteUser(id: string) {
     const user = await this.database
       .delete(schemas.UserTable)
       .where(eq(schemas.UserTable.id, id))

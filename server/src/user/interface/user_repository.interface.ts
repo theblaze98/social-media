@@ -12,5 +12,5 @@ export interface IUserRepository {
   }) => Promise<IUser>
   createUser: (id: string, data: CreateUserDto) => Promise<IUser>
   updateUser: (id: string, data: UpdateUserDto) => Promise<IUser>
-  removeUser: (id: string) => Promise<IUser>
+  deleteUser: (id: string) => Promise<IUser>
 }
