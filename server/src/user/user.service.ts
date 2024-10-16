@@ -5,25 +5,25 @@ import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService implements IUserService {
-  constructor(private readonly UserRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   findOne({ email, username }: { email?: string; username?: string }) {
-    return this.UserRepository.getUser({ email, username })
+    return this.userRepository.getUser({ email, username })
   }
 
   findOneById(id: string) {
-    return this.UserRepository.getUserById(id)
+    return this.userRepository.getUserById(id)
   }
 
   create(id: string, data: CreateUserDto) {
-    return this.UserRepository.createUser(id, data)
+    return this.userRepository.createUser(id, data)
   }
 
   update(id: string, data: UpdateUserDto) {
-    return this.UserRepository.updateUser(id, data)
+    return this.userRepository.updateUser(id, data)
   }
 
   delete(id: string) {
-    return this.UserRepository.deleteUser(id)
+    return this.userRepository.deleteUser(id)
   }
 }
