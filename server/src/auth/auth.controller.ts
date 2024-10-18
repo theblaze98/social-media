@@ -21,13 +21,15 @@ import {
 } from './exeptions'
 import { EmailService } from '@/email/email.service'
 import { RegisterEmailTemplate, VerifyAccountTemplate } from '@/email/templates'
-import { AuthGuard } from '@/common/guards/auth/auth.guard'
+import { JwtGuard } from './helpers/jwt.guard'
+import { JwtService } from '@nestjs/jwt'
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly emailService: EmailService,
+    private jwtService: JwtService,
   ) {}
 
   @Post('register')
@@ -54,12 +56,16 @@ export class AuthController {
 
       const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
-      return await this.userService.create(id, {
+      const accessToken = this.jwtService.sign({ sub: id })
+
+      const user = await this.userService.create(id, {
         ...body,
         password: hashedPassword,
         otpCode,
         otpExpiresAt,
       })
+
+      return { user, accessToken }
     } catch (error) {
       const { message, statusCode } = httpErrorValidation(
         error.message,
@@ -70,7 +76,7 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtGuard)
   @Patch('verify')
   async veryfy(@Body() body: { otpCode: string }, @Req() req) {
     try {
