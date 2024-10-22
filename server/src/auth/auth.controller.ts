@@ -16,6 +16,7 @@ import { encryptPassword, generateOTP } from '@/helpers'
 import {
   EmailAlreadyExists,
   ExpireVerifyCode,
+  InvalidCredentials,
   InvalidVerifyCode,
   UsernameAlreadyExists,
 } from './exeptions'
@@ -23,6 +24,7 @@ import { EmailService } from '@/email/email.service'
 import { RegisterEmailTemplate, VerifyAccountTemplate } from '@/email/templates'
 import { JwtGuard } from './helpers/jwt.guard'
 import { JwtService } from '@nestjs/jwt'
+import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
@@ -30,6 +32,7 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private jwtService: JwtService,
+    private readonly authService: AuthService,
   ) {}
 
   @Post('register')
@@ -101,6 +104,25 @@ export class AuthController {
       return this.userService.update(user.id, { verify: true })
     } catch (error) {
       console.log(error)
+      const { message, statusCode } = httpErrorValidation(
+        error.message,
+        error.status,
+      )
+      throw new HttpException(message, statusCode)
+    }
+  }
+
+  @Post('login')
+  async login(@Body() body: { email: string; password: string }) {
+    try {
+      const user = await this.authService.validateUser(
+        body.email,
+        body.password,
+      )
+      if (!user) throw new InvalidCredentials()
+      const accessToken = this.jwtService.sign({ sub: user.id })
+      return { accessToken }
+    } catch (error) {
       const { message, statusCode } = httpErrorValidation(
         error.message,
         error.status,
